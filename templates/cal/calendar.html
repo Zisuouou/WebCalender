@@ -1,0 +1,56 @@
+{% extends 'cal/base.html' %} {% load static %}
+{% block content %}
+
+<!-- calendar modal -->
+<div class="p-5">
+  <div class="card">
+    <div class="card-body p-0">
+      <div id="calendar">
+        {% for day, events in calendar.items %}
+        <div class="day">
+          <span class="date">{{ day }}</span>
+          <ul class="events">
+            {% for event in events %}
+            <li>{{ event.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% if user.is_authenticated %}
+<div id="modal-view-event-add" class="modal modal-top fade calendar-modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="add-event" enctype="multipart/form-data" action="{% url 'cal:calendar' %}" method="post">  
+        {% csrf_token %}
+        <div class="modal-body">
+            <h4>Add Event Detail</h4>
+            <div class="form-group">
+                <label>Event name</label>
+                <p><input type="text" class="form-control" name="ename"/></p>
+                <label>Event Date</label>
+                <p><input type="text" class="datetimepicker form-control" name="edate"/></p>
+                <label>Event Description</label>
+                <p><textarea class="form-control" name="edesc"></textarea></p>
+            </div>   
+        </div>
+        <div class="modal-footer">
+            <p><input type="submit" class="btn btn-primary" value="save"/></p>
+            <p><input type="button" class="btn btn-primary" data-dismiss="modal" value="close"/></p>
+        </div>  
+    </form>
+    
+    {% for event in events %}
+    <div>{{ event.ename }}</div>
+    <div>{{ event.edate }}</div>
+    <div>{{ event.edesc }}</div>
+    {% endfor %}
+    
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %} {% block script %} {% endblock %}
